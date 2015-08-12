@@ -33,8 +33,7 @@ public class HandlerSurvivalFlying
 	public static boolean cannotFlyInRain = true;
 	public static boolean doesDrainHunger = true;
 	public static boolean doesWeaknessFatigue = true;
-
-	public static boolean canFlySurvival = true;
+ 
 	//was 70 in old mod, farily fast
 	public static int flyDamageCounterLimit = 300;// speed of countdown. changed by cfg file. one for all players
   
@@ -47,14 +46,14 @@ public class HandlerSurvivalFlying
 	
 	@SubscribeEvent
 	public void onPlayerTick(PlayerTickEvent event)
-	{   
-		if(canFlySurvival == false ) { return; }//disable whole module
-		if( !event.player.worldObj.isRemote  ){ return; }
+	{    
+
+		if( event.player.worldObj.isRemote == false ){ return; }//not client side
 		if( event.player.capabilities.isCreativeMode){return;}//leave flying alone
 		
  
 		//use the players display name as the hashmap key for the flyCountdown
-		String pname = event.player.getDisplayName();
+		//String pname = event.player.getDisplayName();
 	 
 		//start at zero, of course. it counts up to the limit (from config)
 	//	if(playerFlyDamageCounters.containsKey(pname) == false) { playerFlyDamageCounters.put(pname, 0); }
@@ -71,13 +70,14 @@ public class HandlerSurvivalFlying
 		//but, if current and required and both peaceful (equal) or if current > required then disabled false
 		
 		if(difficultyCurrent < difficultyRequiredToFly ) { disabledFromDifficulty = true; } 
-		 
-		//if not allowed, and is raining, then disable
+
+ 
 		if(cannotFlyInRain && world.getWorldInfo().isRaining()) { disabledFromRain = true; }
 		
 		//if we are not allowed, and its night, then disable
 		if(cannotFlyAtNight && !world.isDaytime()) { disabledFromNight = true; } 
 	  		  
+		
 		boolean isNaked = (
 				   event.player.getEquipmentInSlot(1) == null
 				&& event.player.getEquipmentInSlot(2) == null
@@ -94,15 +94,26 @@ public class HandlerSurvivalFlying
 
 		// only if single player and NOT creative
 
-
-		//http://minecraft.gamepedia.com/Status_effect 
+boolean hasEnoughHunger = event.player.getFoodStats().getFoodLevel() >= StartFlyingHunger;
+boolean hasEnoughHealth = event.player.getHealth() >= StartFlyingHealth;
+	//	System.out.println("onPlayerTick "+ event.player.worldObj.isRemote);
+ 	//http://minecraft.gamepedia.com/Status_effect 
 		//int miningFatigue = 4;
 		//int weakness = 18;
 			// entire block is disabled
-
-		if (       event.player.getHealth() >= StartFlyingHealth
-				&& event.player.getFoodStats().getFoodLevel() >= StartFlyingHunger
-				&& event.player.experienceLevel >= StartFlyingLevel
+/*
+System.out.println("hasEnoughHunger "+hasEnoughHunger);
+System.out.println("hasEnoughHealth "+hasEnoughHealth);
+System.out.println("disabledFromArmor "+disabledFromArmor);
+System.out.println("disabledFromBurning "+disabledFromBurning);
+System.out.println("disabledFromDifficulty "+disabledFromDifficulty);
+System.out.println("disabledFromRain "+disabledFromRain);
+System.out.println("disabledFromNight "+disabledFromNight);
+*/
+		
+		if (       hasEnoughHunger
+				&& hasEnoughHealth
+				//&& event.player.experienceLevel >= StartFlyingLevel
 				&& disabledFromArmor == false// did wearing armor disable 
 				&& disabledFromBurning == false// are we burning disabled 
 				&& disabledFromDifficulty == false//is difficulty too low
@@ -110,12 +121,14 @@ public class HandlerSurvivalFlying
 				&& disabledFromNight == false
 		)
 		{
+			System.out.println("allowFlying true");
 			//okay, you have passed all the tests
 			event.player.capabilities.allowFlying = true;  
 		} 
 		else
 		{  
 			// disable flying in future
+			System.out.println("allowFlying false");
 			event.player.capabilities.allowFlying = false; 
 			// turn off current flying ability
 			event.player.capabilities.isFlying = false; 
@@ -125,6 +138,7 @@ public class HandlerSurvivalFlying
 		if (event.player.capabilities.isFlying)
 		{ 
 			//if the config is set to drain your xp, then up this counter
+			
 			/*
 			if(doesDrainLevels) //DOESNT WORK
 			{

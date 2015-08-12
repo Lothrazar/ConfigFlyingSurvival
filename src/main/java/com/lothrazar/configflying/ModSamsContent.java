@@ -15,7 +15,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 @Mod(modid = ModSamsContent.MODID,useMetadata = true) 
 public class ModSamsContent
 {
-	@Instance(value = ModSamsContent.MODID)
+	@Instance(value = ModSamsContent.MODID) 
 	public static ModSamsContent instance;
 	public static Logger logger;
 	public final static String MODID = "configflying"; 

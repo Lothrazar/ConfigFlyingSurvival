@@ -57,12 +57,8 @@ public class ConfigFile
 	public ConfigFile()
 	{
 		String category = Configuration.CATEGORY_GENERAL;
-		
-		category = "flyingInSurvival";
-
-		HandlerSurvivalFlying.canFlySurvival = ModSamsContent.config.getBoolean("all_canFlySurvival",category, true
-				,"Set to false to disable this whole area.  If true, players can fly in survival mode, with restrictions and costs as listed here.  Also has a /flyhelp command for more info."); 
-		
+		 
+ 
 		HandlerSurvivalFlying.cannotFlyWhileBurning = ModSamsContent.config.getBoolean("disableWhileBurning",category, true
 				,"When true, this disables flying while you are burning."); 
 
