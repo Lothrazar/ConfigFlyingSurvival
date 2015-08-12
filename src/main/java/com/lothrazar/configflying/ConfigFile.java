@@ -1,4 +1,4 @@
-package com.lothrazar.samscontent;
+package com.lothrazar.configflying;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;

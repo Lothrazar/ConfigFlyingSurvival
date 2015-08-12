@@ -1,8 +1,6 @@
-package com.lothrazar.command;
+package com.lothrazar.configflying;
  
 import java.util.ArrayList;   
-
-import com.lothrazar.samscontent.HandlerSurvivalFlying;
 
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;

@@ -1,9 +1,8 @@
-package com.lothrazar.samscontent;
+package com.lothrazar.configflying;
 
 import java.util.HashMap; 
-import org.apache.logging.log4j.Logger; 
 
-import com.lothrazar.util.Reference;
+import org.apache.logging.log4j.Logger; 
 
 import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.common.config.Configuration; 

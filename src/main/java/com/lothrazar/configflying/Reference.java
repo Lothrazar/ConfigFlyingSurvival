@@ -1,4 +1,4 @@
-package com.lothrazar.util;
+package com.lothrazar.configflying;
 
 import java.util.ArrayList;
 
