@@ -20,7 +20,7 @@ import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
  
 public class HandlerSurvivalFlying  
 { 
-	private boolean quickSortEnabled;  
+	//private boolean quickSortEnabled;  
  
     
 	public static int StartFlyingLevel = 2;
@@ -58,9 +58,9 @@ public class HandlerSurvivalFlying
 		//start at zero, of course. it counts up to the limit (from config)
 	//	if(playerFlyDamageCounters.containsKey(pname) == false) { playerFlyDamageCounters.put(pname, 0); }
 		 
-		boolean disabledFromDifficulty = false;
-		boolean disabledFromRain = false;
-		boolean disabledFromNight = false;
+		//boolean disabledFromDifficulty = false;
+		//boolean disabledFromRain = false;
+		//boolean disabledFromNight = false;
 		
 		World world = event.player.worldObj;
 	
@@ -69,38 +69,29 @@ public class HandlerSurvivalFlying
 		//ex: if current is peaceful, required is easy, then disabled is true
 		//but, if current and required and both peaceful (equal) or if current > required then disabled false
 		
-		if(difficultyCurrent < difficultyRequiredToFly ) { disabledFromDifficulty = true; } 
+		//if(difficultyCurrent < difficultyRequiredToFly ) { disabledFromDifficulty = true; } 
 
  
-		if(cannotFlyInRain && world.getWorldInfo().isRaining()) { disabledFromRain = true; }
+		//if(cannotFlyInRain && world.getWorldInfo().isRaining()) { disabledFromRain = true; }
 		
 		//if we are not allowed, and its night, then disable
-		if(cannotFlyAtNight && !world.isDaytime()) { disabledFromNight = true; } 
+		//if(cannotFlyAtNight && !world.isDaytime()) { disabledFromNight = true; } 
 	  		  
 		
-		boolean isNaked = (
-				   event.player.getEquipmentInSlot(1) == null
-				&& event.player.getEquipmentInSlot(2) == null
-				&& event.player.getEquipmentInSlot(3) == null 
-				&& event.player.getEquipmentInSlot(4) == null);
  
 		// if we are not naked, AND the rule is set to "no armor only" then its
 		// not allowed
-		boolean disabledFromArmor = (isNaked == false) && NoArmorOnly;
+		//boolean disabledFromArmor = (isNaked == false) && NoArmorOnly;
 		// event.player.mc.theWorld.difficultySetting == EnumDifficulty.HARD
 	 
 		// if we ARE burning, and we may NOT fly while burning, then disabled
-		boolean disabledFromBurning = event.player.isBurning() && cannotFlyWhileBurning;
+		//boolean disabledFromBurning = event.player.isBurning() && cannotFlyWhileBurning;
 
 		// only if single player and NOT creative
 
-boolean hasEnoughHunger = event.player.getFoodStats().getFoodLevel() >= StartFlyingHunger;
-boolean hasEnoughHealth = event.player.getHealth() >= StartFlyingHealth;
-	//	System.out.println("onPlayerTick "+ event.player.worldObj.isRemote);
- 	//http://minecraft.gamepedia.com/Status_effect 
-		//int miningFatigue = 4;
-		//int weakness = 18;
-			// entire block is disabled
+//boolean hasEnoughHunger = event.player.getFoodStats().getFoodLevel() >= StartFlyingHunger;
+//boolean hasEnoughHealth = event.player.getHealth() >= StartFlyingHealth;
+ 
 /*
 System.out.println("hasEnoughHunger "+hasEnoughHunger);
 System.out.println("hasEnoughHealth "+hasEnoughHealth);
@@ -110,7 +101,7 @@ System.out.println("disabledFromDifficulty "+disabledFromDifficulty);
 System.out.println("disabledFromRain "+disabledFromRain);
 System.out.println("disabledFromNight "+disabledFromNight);
 */
-		
+		/*
 		if (       hasEnoughHunger
 				&& hasEnoughHealth
 				//&& event.player.experienceLevel >= StartFlyingLevel
@@ -119,84 +110,51 @@ System.out.println("disabledFromNight "+disabledFromNight);
 				&& disabledFromDifficulty == false//is difficulty too low
 				&& disabledFromRain == false
 				&& disabledFromNight == false
-		)
+		)*/
+		boolean isNaked = (
+				   event.player.getEquipmentInSlot(1) == null
+				&& event.player.getEquipmentInSlot(2) == null
+				&& event.player.getEquipmentInSlot(3) == null 
+				&& event.player.getEquipmentInSlot(4) == null);
+		
+		if(isNaked)
 		{
-			System.out.println("allowFlying true");
-			//okay, you have passed all the tests
 			event.player.capabilities.allowFlying = true;  
 		} 
 		else
 		{  
-			// disable flying in future
-			System.out.println("allowFlying false");
 			event.player.capabilities.allowFlying = false; 
-			// turn off current flying ability
 			event.player.capabilities.isFlying = false; 
-			//reset the timer for this player
-			//playerFlyDamageCounters.put(pname, 0); 
 		}
+		
 		if (event.player.capabilities.isFlying)
 		{ 
 			//if the config is set to drain your xp, then up this counter
+			//TODO:
+			System.out.println(event.player.worldObj.getWorldTime()%40);
 			
-			/*
-			if(doesDrainLevels) //DOESNT WORK
+			if(event.player.experienceTotal > 0 && 
+					event.player.worldObj.getWorldTime() % 2*20 == 0)
 			{
-				
-				//do flyDamageCounter++; but use put and get of hashmap
-				int prevCounter = playerFlyDamageCounters.get(pname);
-				
-				prevCounter++;
-				   
-				if (prevCounter == flyDamageCounterLimit)
-				{
-					prevCounter = 0;//this will get set into the hashmap regardless
-					event.player.experience = 0;
-					event.player.experienceLevel--;
-				}
-				
-				//save the prev counter. is eitehr zero, or it was increased by one
-	 
-				//playerFlyDamageCounters.put(pname, prevCounter); 
-			} //if the counter is never increased, the counter never reaches the limit (stays at 0 of default max 70)
-			*/
-			//int hunger = 17;
-			 
-			int duration = 2 * Reference.TICKS_PER_SEC ;//20 ticks = 1 second. and this is added every time, so cosntant effect  until we land
-			int level = 4;//no number is actually default, so this makes potion effect 2 == III, 4 == V
-			  
-			if(doesWeaknessFatigue)
-			{
-				event.player.addPotionEffect(new PotionEffect(Reference.potion_FATIGUE, duration, level));
-				event.player.addPotionEffect(new PotionEffect(Reference.potion_WEAKNESS, duration, level));
+System.out.println("1xp");
+				UtilExperience.drainExp(event.player, 1.0F);
 				
 			}
-			if(doesDrainHunger) {event.player.addPotionEffect(new PotionEffect(Reference.potion_HUNGER, duration, 0));}
-			   
-		} // end if isFlying
-		else //so therefore isFlying is false
+			
+			
+		} 
+		else
 		{ 
 			// i am not flying so do the fall damage thing
 			if (event.player.posY < event.player.prevPosY)
 			{
+				event.player.capabilities.allowFlying = false;// to enable  fall distance
+
 				// we are falling 
 				//double fallen = Math.max(	(event.player.prevPosY - event.player.posY), 0);
 //dont add the number, it doubles (ish) our fall damage
 				//event.player.fallDistance += (fallen * 0.5);
-				
-					 
-				event.player.capabilities.allowFlying = false;// to enable  fall distance
-
-				//dont leave them lingering with 0:00 potions forever 
-				if(doesWeaknessFatigue)
-				{
-				
-					
-					 event.player.removePotionEffect(Reference.potion_FATIGUE);
-					 event.player.removePotionEffect(Reference.potion_WEAKNESS);
-				}
-				
-				if(doesDrainHunger) {event.player.removePotionEffect(Reference.potion_HUNGER);}
+		
 			} 
 		}  
 	}// end player tick event

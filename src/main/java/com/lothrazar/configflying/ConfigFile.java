@@ -1,59 +1,9 @@
 package com.lothrazar.configflying;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraftforge.common.config.Configuration;
-
-
 
 public class ConfigFile
 {
-	public boolean swiftDeposit = true;
-	public boolean smartEnderchest = true;
-	public boolean increasedStackSizes = true;
-	public boolean moreFuel = true;
-	public boolean moreFutureTrades = true;
-	public boolean skullSignNames;
-	public boolean betterDebugScreen; 
-	
-	public boolean craftableTransmuteRecords = true;  
-	public boolean craftableFlatDoubleSlab = true; 
-	public boolean craftableBonemealColouredWool;   
-	public boolean craftableMobHeads;
-	public boolean betterBonemeal;
-	public boolean decorativeBlocks;
-	public boolean mutton;
-	public boolean recipes;
-	//boolean incompSlime;
-	public boolean uncraftGeneral;
-	public boolean runestones;
-	public boolean magicApples;
-	public boolean fishingNetBlock;
-	public boolean xRayBlock;
-	public boolean masterWand;
-	public boolean enderBook;
-	public boolean weatherBlock;
-	public boolean gameruleBlocks;
-	public boolean craftableMushroomBlocks;
-	public boolean searchtrade;
-	public boolean searchitem;
-	public boolean killall;
-	public boolean enderchest;
-	public boolean simplewaypoint;
-	public boolean todo;
-	public boolean deathItemsChest;
-	public boolean home;
-	public boolean worldhome;
-	public boolean lootObsidian;
-	public boolean lootAllRecords;
-	public boolean lootGlowstone;
-	public boolean lootQuartz;
- 
-
-	//to go between main and sub levels nested in the json style cfg file
-	private static String LevelSep = ".";
-	
 	public ConfigFile()
 	{
 		String category = Configuration.CATEGORY_GENERAL;
