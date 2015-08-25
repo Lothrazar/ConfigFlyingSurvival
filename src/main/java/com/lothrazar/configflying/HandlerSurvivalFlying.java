@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import org.apache.logging.log4j.Logger; 
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.common.config.Configuration; 
 import net.minecraft.world.World;   
@@ -16,6 +17,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.InputEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
  
 public class HandlerSurvivalFlying  
@@ -40,9 +42,21 @@ public class HandlerSurvivalFlying
 	//private HashMap<String, Integer> playerFlyDamageCounters = new HashMap<String, Integer>();
 
 
-	private boolean doesDrainLevels = false;//TODO: FIx this as it doesnt work
-  
+	private boolean doesDrainLevels = true;//TODO: FIx this as it doesnt work
+	/*
+	@SubscribeEvent
+    public void onKeyInput(InputEvent.KeyInputEvent event) 
+    {   
+        if(ClientProxy.keyFlyToggle.isPressed() )
+        { 	     
+        	 network.sendToServer( new MessageKeyPressed(ClientProxy.keyShiftUp.getKeyCode()));  
+        	
+        	
+        	
+        	
+        }      
 	 
+    }*/
 	
 	@SubscribeEvent
 	public void onPlayerTick(PlayerTickEvent event)
@@ -117,7 +131,7 @@ System.out.println("disabledFromNight "+disabledFromNight);
 				&& event.player.getEquipmentInSlot(3) == null 
 				&& event.player.getEquipmentInSlot(4) == null);
 		
-		if(isNaked)
+		if(isNaked && event.player.experienceTotal > 0)
 		{
 			event.player.capabilities.allowFlying = true;  
 		} 
@@ -131,22 +145,17 @@ System.out.println("disabledFromNight "+disabledFromNight);
 		{ 
 			//if the config is set to drain your xp, then up this counter
 			//TODO:
-			System.out.println(event.player.worldObj.getWorldTime()%40);
-			
+			//System.out.println(event.player.worldObj.getWorldTime()%40);
+			int seconds = 5;
 			if(event.player.experienceTotal > 0 && 
-					event.player.worldObj.getWorldTime() % 2*20 == 0)
+					event.player.worldObj.getWorldTime() % seconds*20 == 0)
 			{
-System.out.println("1xp");
 				UtilExperience.drainExp(event.player, 1.0F);
-				
 			}
-			
-			
 		} 
 		else
 		{ 
-			// i am not flying so do the fall damage thing
-			if (event.player.posY < event.player.prevPosY)
+			if (event.player.posY < event.player.prevPosY)// i am not flying so do the fall damage thing
 			{
 				event.player.capabilities.allowFlying = false;// to enable  fall distance
 
@@ -158,4 +167,6 @@ System.out.println("1xp");
 			} 
 		}  
 	}// end player tick event
+
+	
 }
